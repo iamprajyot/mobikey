@@ -17,24 +17,32 @@ var arr = [
 
 jQuery(document).ready(function() {
     jQuery("#phone").find("button").mousedown(function(event) {
-        first_time = (new Date()).getTime();
+
         var button_pressed = jQuery(event.currentTarget).data("value");
+
+        first_time = (new Date()).getTime();
+
         timeout = setInterval(function() {
             jQuery("#result").val(t9(jQuery("#result").val(), button_pressed));
-        }, 900);
+            clearInterval(timeout);
+        }, 500);
+
         return false;
     });
 
     jQuery("#phone").find("button").mouseup(function(event) {
-        second_time = (new Date()).getTime();
+
         var button_pressed = jQuery(event.currentTarget).data("value");
+
+        second_time = (new Date()).getTime();
         clearInterval(timeout);
-        if (second_time - first_time < 900)
+
+        if (second_time - first_time < 500)
         {
             clickEvent(button_pressed);
         }
-        return false;
 
+        return false;
     });
 });
 
@@ -42,11 +50,13 @@ jQuery(document).ready(function() {
 
 function clickEvent(button_pressed) {
     var current_time = (new Date()).getTime();
+
     if (isNaN(button_pressed) || button_pressed === 0)
     {
         jQuery("#result").val(t9(jQuery("#result").val(), button_pressed));
     }
-    else {
+    else
+    {
         if (button_pressed === prev_button)
         {
             click_count++;
@@ -63,29 +73,31 @@ function clickEvent(button_pressed) {
     prev_time = current_time;
 }
 
+
+// to appened the character at the end
 function t9(text, button_pressed) {
-    // Write your code here
     text = text + button_pressed;
     return text;
 }
 
+// on same button  click replace last character with next character in array
 function earlySameButton(text, button_pressed) {
-// Write your code here
     text = text.toString().slice(0, -1) + button_pressed;
     return text;
 }
 
+// if same button clicked again
 function sameButtonClick(prevTime, currentTime, buttonValue)
 {
-    if (currentTime > (prevTime + 1000))
+    if (currentTime > (prevTime + 500))
     {
-// repeat value
+        // repeat value
         click_count = 1;
         jQuery("#result").val(t9(jQuery("#result").val(), arr[buttonValue - 1][1]));
     }
     else
     {
-// next value
+        // next value
         if (click_count > (arr[buttonValue - 1].length - 1))
         {
             click_count = 1;
